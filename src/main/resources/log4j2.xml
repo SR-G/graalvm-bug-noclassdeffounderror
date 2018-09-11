@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="INFO">
+	<appenders>
+		<console name="consoleAppender" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</console>
+<!--         <GELF name="gelfAppender" server="tensin.org" port="12201" hostName="appserver01.example.com" additionalFields="foo=bar"/> -->
+	</appenders>
+	<loggers>
+		<logger name="org.reflections" level="WARN" />
+		<root level="INFO">
+			<appender-ref ref="consoleAppender" />
+<!--             <appender-ref ref="gelfAppender"/> -->
+		</root>
+	</loggers>
+</configuration>

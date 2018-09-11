@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<properties>
+		<sourceEncoding>UTF-8</sourceEncoding>
+		<compileSource>1.7</compileSource>
+		<javaSourceCompatibility>${compileSource}</javaSourceCompatibility>
+		<javaTargetCompatibility>${compileSource}</javaTargetCompatibility>
+		<targetJdk>${compileSource}</targetJdk>
+
+		<!-- Main class when launching the tool from command line -->
+		<manifest.mainclass>test.GraalVMLog4J2Bug</manifest.mainclass>
+
+		<!-- Various versions of major dependencies  -->
+		<version.log4j2>2.8.1</version.log4j2> <!-- Do not take any newer versions for now -->
+	</properties>
+
+	<groupId>test</groupId>
+	<artifactId>graalvm-bug-noclassdeffounderror</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+
+	<description>GraalVM bug reproduced</description>
+	<name>graalvm-bug-</name>
+	<packaging>jar</packaging>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<source>${compileSource}</source>
+					<target>${compileSource}</target>
+					<!-- <fork>true</fork> -->
+					<proc>none</proc>
+				</configuration>
+			</plugin>
+			
+			<!-- Manifest configuration -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<!-- Allows Maven to put the current version in each MANIFEST.MF file, 
+						used to retrieve the version at runtime (@see SAIGVersion for example) -->
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+							<addClasspath>true</addClasspath>
+							<mainClass>${manifest.mainclass}</mainClass>
+							<classpathPrefix>dependency/</classpathPrefix>
+							<!--
+							<classpathLayoutType>repository</classpathLayoutType>
+							-->
+						</manifest>
+						<manifestEntries>
+							<Extension-Name>${project.name}</Extension-Name>
+							<Implementation-Version>${project.version}</Implementation-Version>
+						</manifestEntries>
+					</archive>
+					<excludes>
+						<exclude>**/*.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<!-- Definition of all needed dependencies. 
+		 This should be later moved to a "root" module -->
+	<dependencyManagement>
+		<dependencies>
+			<!-- Log4J2 with all available bridges in order to cover all situations -->
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-core</artifactId>
+				<version>${version.log4j2}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-api</artifactId>
+				<version>${version.log4j2}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-jul</artifactId>
+				<version>${version.log4j2}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-slf4j-impl</artifactId>
+				<version>${version.log4j2}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-jcl</artifactId>
+				<version>${version.log4j2}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-1.2-api</artifactId>
+				<version>${version.log4j2}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+
+	<!-- Activation of the libraries we want to take in this module -->
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-jul</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-jcl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-1.2-api</artifactId>
+		</dependency>
+	</dependencies>
+</project>
